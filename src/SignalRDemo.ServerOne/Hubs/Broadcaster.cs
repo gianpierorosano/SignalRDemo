@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
+using System.Timers;
 using System.Web.Configuration;
 using Microsoft.AspNet.SignalR;
 using SignalRDemo.ServerOne.Models;
@@ -28,32 +28,30 @@ namespace SignalRDemo.ServerOne.Hubs
 
         #endregion
 
-        private readonly TimeSpan BroadcastInterval =
-           TimeSpan.FromMilliseconds(1000);
+        private const int BroadcastInterval = 1000;
         private readonly IHubContext _hubContext;
-        private Timer _broadcastLoop;
+        private readonly Timer _broadcastLoop;
         private int startXPoint;
 
         private Broadcaster()
         {
             _hubContext = GlobalHost.ConnectionManager.GetHubContext<ChartHub>();
+            _broadcastLoop = new Timer { Interval = BroadcastInterval };
+            _broadcastLoop.Elapsed += BroadcastDataPoint;
+            _broadcastLoop.AutoReset = false;
         }
 
         public void StartLiveChart()
         {
-            _broadcastLoop = new Timer(
-                BroadcastDataPoint,
-                null,
-                BroadcastInterval,
-                BroadcastInterval);
+            _broadcastLoop.Start();
         }
 
         public void StopLiveChart()
         {
-            _broadcastLoop.Dispose();
+            _broadcastLoop.Stop();
         }
 
-        private void BroadcastDataPoint(object o)
+        private void BroadcastDataPoint(object sender, ElapsedEventArgs e)
         {
             var rnd = new Random();
             startXPoint++;
@@ -65,6 +63,7 @@ namespace SignalRDemo.ServerOne.Hubs
                 ServerName = ServerName
             };
             _hubContext.Clients.All.updateChart(model);
+            _broadcastLoop.Start();
         }
     }
 }
