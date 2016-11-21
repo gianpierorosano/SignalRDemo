@@ -1,0 +1,5 @@
+src/packages/
+src/SignalRDemo.ServerOne/bin/
+src/SignalRDemo.ServerOne/obj/
+src/SignalRDemo.ServerTwo/bin/
+src/SignalRDemo.ServerTwo/obj/
