@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SignalR Demo</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.1.js"></script>
+    <script src="/signalr/hubs"></script>
+</head>
+<body>
+    <!-- header -->
+    <nav id="header" class="navbar navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="brand">
+                    <a href="/">
+                        SignalR Demo <span class="hidden-xs text-muted">ASP.NET MVC</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- /header -->
+    <!-- sidebar -->
+    <div id="sidebar" class="sidebar-toggle">
+        <ul class="nav nav-sidebar">
+            <li>
+                <a href="/">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+            <li role="separator" class="divider"></li>
+        </ul>
+    </div>
+    <!-- sidebar -->
+    <!-- page-content-wrapper -->
+    <div id="page-content-wrapper" class="page-content-toggle">
+        <div class="container-fluid">
+            <h1>@ViewBag.Title</h1>
+            <div class="row">
+                <div id="content" class="col-md-8 col-md-offset-1 col-xs-12">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p class="text-muted">&#169; 2016 Gianpiero Rosano'</p>
+        </div>
+    </div>
+    <!-- page-content-wrapper -->
+</body>
+</html>

@@ -1,0 +1,96 @@
+﻿@using System.Web.Configuration
+@{
+    var serverName = WebConfigurationManager.AppSettings["ServerName"]
+           ?? string.Empty;
+
+    ViewBag.Title = string.Format("Home - {0}", serverName);
+}
+
+<div id="chartContainerServer1" style="height: 400px; width: 100%;"></div>
+<br />
+<div id="chartContainerServer2" style="height: 400px; width: 100%;"></div>
+<br />
+<div style="margin-left: 30%">
+    <button id="StartButton" class="btn btn-success" type="submit" value="Start">Start Live Chart</button>
+    <button id="StopButton" class="btn btn-danger" type="submit" value="Stop">Stop Live Chart</button>
+</div>
+<div style="clear: both">
+    <label id="connectionStatus"></label>
+</div>
+
+@* ReSharper disable UseOfImplicitGlobalInFunctionScope *@
+<script type="text/javascript">
+    $(function () {
+
+        var dpsServer1 = [{ x: 0, y: 0 }];
+        var dpsServer2 = [{ x: 0, y: 0 }];
+
+        var chartServer1 = new CanvasJS.Chart("chartContainerServer1", {
+            title: {
+                text: "Live Chart Server 1"
+            },
+            axisY: {
+                title: "Units"
+            },
+            data: [{
+                type: "line",
+                dataPoints: dpsServer1
+            }]
+        });
+        chartServer1.render();
+
+        var chartServer2 = new CanvasJS.Chart("chartContainerServer2", {
+            title: {
+                text: "Live Chart Server 2"
+            },
+            axisY: {
+                title: "Units"
+            },
+            data: [{
+                type: "line",
+                dataPoints: dpsServer2
+            }]
+        });
+        chartServer2.render();
+
+        //SignalR Section
+        var chartHub = $.connection.chartHub;
+
+        $.connection.hub.start().done(function () {
+            $("#connectionStatus").html("ChartHub Connected");
+        });
+
+        chartHub.client.updateChart = function (dataPoint) {
+            switch (dataPoint.serverName) {
+                case "Server1":
+                    dpsServer1.push(dataPoint);
+                    chartServer1.render();
+                    break;
+                case "Server2":
+                    dpsServer2.push(dataPoint);
+                    chartServer2.render();
+                    break;
+            }
+        };
+
+        //Button Actions
+        var startButton = document.getElementById('StartButton');
+        var stopButton = document.getElementById('StopButton');
+
+        function startLiveChart() {
+            startButton.removeEventListener('click', startLiveChart);
+            stopButton.addEventListener('click', stopLiveChart);
+            chartHub.server.startLiveChart();
+        };
+
+        function stopLiveChart() {
+            stopButton.removeEventListener('click', stopLiveChart);
+            startButton.addEventListener('click', startLiveChart);
+            chartHub.server.stopLiveChart();
+        };
+
+        startButton.addEventListener('click', startLiveChart);
+
+    });
+</script>
+@* ReSharper restore UseOfImplicitGlobalInFunctionScope *@
