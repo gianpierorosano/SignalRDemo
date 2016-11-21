@@ -3,3 +3,6 @@ src/SignalRDemo.ServerOne/bin/
 src/SignalRDemo.ServerOne/obj/
 src/SignalRDemo.ServerTwo/bin/
 src/SignalRDemo.ServerTwo/obj/
+src/SignalRDemo.ServerOne/SignalRDemo.ServerOne.csproj.user
+src/SignalRDemo.ServerTwo/SignalRDemo.ServerTwo.csproj.user
+src/SignalRDemo.v12.suo
